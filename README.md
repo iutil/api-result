@@ -1,5 +1,5 @@
 
-[![](https://jitpack.io/v/fengwenyi/JavaLib-result.svg)](https://jitpack.io/#fengwenyi/JavaLib-result)
+[![](https://jitpack.io/v/iutil/api-result.svg)](https://jitpack.io/#iutil/api-result)
 
 
 <h1 align="center">Api Result</h1>
@@ -28,11 +28,11 @@
 
 ```xml
 <dependencies>
-    <!-- 添加 JavaLib-result 支持 -->
+    <!-- 添加 Api Result 支持 -->
     <dependency>
-        <groupId>com.github.fengwenyi</groupId>
-        <artifactId>JavaLib-result</artifactId>
-        <version>V1.1.0.Beta</version>
+        <groupId>com.github.iutil</groupId>
+        <artifactId>api-result</artifactId>
+        <version>1.0.0.BUILD</version>
     </dependency>
 </dependencies>
 ```

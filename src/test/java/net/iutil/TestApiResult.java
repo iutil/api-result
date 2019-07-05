@@ -229,4 +229,14 @@ public class TestApiResult {
 
     }
 
+    @Test
+    public void returnMsg() {
+        BaseCodeMsg TEST_CODE_MSG = BaseCodeMsg.app(10, "异常测试：%s");
+        ApiResult<Object> apiResult = ApiResult.error(TEST_CODE_MSG.fillArgs("自定义异常"));
+        System.out.println(apiResult);
+        ApiResult<Object> apiResult2 = ApiResult.error(TEST_CODE_MSG.fillArgs("未知异常"));
+        System.out.println(apiResult2);
+
+    }
+
 }

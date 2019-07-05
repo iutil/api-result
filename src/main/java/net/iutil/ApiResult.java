@@ -1,8 +1,7 @@
 package net.iutil;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import java.io.Serializable;
+import lombok.Getter;
 
 /**
  * 接口返回结果封装工具类
@@ -32,18 +31,13 @@ import java.io.Serializable;
 /* 过滤掉null字段，data里面的每个对象都需要加 */
 //@JsonSerialize(include= JsonSerialize.Inclusion.NON_NULL)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApiResult<T> implements Serializable {
+@Getter
+public class ApiResult<T> extends BaseResult<T> {
 
     private static final long serialVersionUID = -2683214929256826770L;
 
     /* 返回码 */
     private Integer code;
-
-    /* 描述 */
-    private String msg;
-
-    /* 数据 */
-    private T data;
 
     /**
      * 无参数构造方法
@@ -52,99 +46,25 @@ public class ApiResult<T> implements Serializable {
     }
 
     /**
-     * 返回码构造方法
-     * @param code 返回码
-     * @param msg 描述
-     */
-    public ApiResult(Integer code, String msg) {
-        this.code = code;
-        this.msg = msg;
-    }
-
-    /**
-     * 返回码构造方法
-     * @param baseCodeMsg {@link BaseCodeMsg}
-     */
-    public ApiResult(BaseCodeMsg baseCodeMsg) {
-        if (baseCodeMsg != null) {
-            this.code = baseCodeMsg.getCode();
-            this.msg = baseCodeMsg.getMsg();
-        }
-    }
-
-    /**
      * 成功时调用
      * @param <T> {@link T}
      * @return {@link ApiResult}
      */
-    public static <T> ApiResult<T> success() {
-        return new ApiResult<>(BaseCodeMsg.SUCCESS);
-    }
-
-    /**
-     * 成功时调用
-     * @param data 数据
-     * @param <T> {@link T}
-     * @return {@link ApiResult}
-     */
-    public static <T> ApiResult<T> success(T data) {
-        ApiResult<T> result = success();
-        result.data = data;
-        return result;
+    public static <T> ApiResult success() {
+        ApiResult apiResult = new ApiResult();
+        apiResult.setSuccess(BaseResult.SUCCESS);
+        return apiResult;
     }
 
     /**
      * 错误时调用
-     * @param baseCodeMsg 返回码
      * @param <T> {@link T}
      * @return {@link ApiResult}
      */
-    public static <T> ApiResult<T> error(BaseCodeMsg baseCodeMsg) {
-        return new ApiResult<>(baseCodeMsg);
-    }
-
-    /**
-     * 错误时调用
-     * @param code 返回码
-     * @param msg 描述
-     * @param <T> {@link T}
-     * @return {@link ApiResult}
-     */
-    public static <T> ApiResult<T> error(Integer code, String msg) {
-        return new ApiResult<>(code, msg);
-    }
-
-    /**
-     * 错误时调用，默认错误，错误码：-1；描述信息：Error
-     * @param <T> {@link T}
-     * @return {@link ApiResult}
-     */
-    public static <T> ApiResult<T> error() {
-        return new ApiResult<>(BaseCodeMsg.ERROR_INIT);
-    }
-
-    /**
-     * 获取返回码
-     * @return 返回码
-     */
-    public Integer getCode() {
-        return code;
-    }
-
-    /**
-     * 获取描述信息
-     * @return 描述信息
-     */
-    public String getMsg() {
-        return msg;
-    }
-
-    /**
-     * 获取数据
-     * @return {@link T}
-     */
-    public T getData() {
-        return data;
+    public static <T> ApiResult error() {
+        ApiResult apiResult = new ApiResult();
+        apiResult.setSuccess(BaseResult.SUCCESS);
+        return new ApiResult();
     }
 
     /**
@@ -159,11 +79,11 @@ public class ApiResult<T> implements Serializable {
 
     /**
      * 设置描述信息
-     * @param msg 描述信息
-     * @return {@link ApiResult}
+     * @param message 描述信息
+     * @return {@link net.iutil.ApiResult}
      */
-    public ApiResult setMsg(String msg) {
-        this.msg = msg;
+    public ApiResult setMessage(String message) {
+        super.setMessage(message);
         return this;
     }
 
@@ -172,7 +92,7 @@ public class ApiResult<T> implements Serializable {
      * @param data 数据
      */
     public ApiResult setData(T data) {
-        this.data = data;
+       super.setData(data);
         return this;
     }
 
@@ -185,14 +105,15 @@ public class ApiResult<T> implements Serializable {
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("ApiResult{");
+        StringBuilder sb = new StringBuilder("ApiResult { ");
+        sb.append("success=").append(super.getSuccess()); // success
         if (code != null) // code not null
-            sb.append("code=").append(code);
-        if (StringUtils.isNotEmpty(msg)) // msg not empty
-            sb.append(", msg='").append(msg).append('\'');
-        if (data != null) // data not null
-            sb.append(", data=").append(data);
-        sb.append("}");
+            sb.append(", code=").append(code);
+        if (StringUtils.isNotEmpty(super.getMessage())) // msg not empty
+            sb.append(", message='").append(super.getMessage()).append('\'');
+        if (super.getData() != null) // data not null
+            sb.append(", data=").append(super.getData());
+        sb.append(" }");
         return sb.toString();
     }
 }
